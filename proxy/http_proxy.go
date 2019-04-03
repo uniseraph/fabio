@@ -165,7 +165,7 @@ func (p *HTTPProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//Add OpenTrace Headers to response
 	trace.InjectHeaders(span, r)
 
-	upgrade, accept := r.Header.Get("Upgrade"), r.Header.Get("Accept")
+	upgrade, accept , dryrun:= r.Header.Get("Upgrade"), r.Header.Get("Accept") , r.Header.Get("Dryrun")
 
 	tr := p.Transport
 	if t.TLSSkipVerify {
@@ -188,6 +188,10 @@ func (p *HTTPProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		// use the flush interval for SSE (server-sent events)
 		// must be > 0s to be effective
 		h = newHTTPProxy(targetURL, tr, p.Config.FlushInterval)
+
+	case dryrun == "true":
+
+		h = newEchoProxy(targetURL,tr,p.Config.FlushInterval)
 
 	default:
 		h = newHTTPProxy(targetURL, tr, p.Config.GlobalFlushInterval)
