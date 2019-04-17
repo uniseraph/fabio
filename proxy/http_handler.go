@@ -28,17 +28,3 @@ func newHTTPProxy(target *url.URL, tr http.RoundTripper, flush time.Duration) ht
 	}
 }
 
-type echoProxy struct {
-
-	target *url.URL
-}
-
-func (p *echoProxy) ServeHTTP(w http.ResponseWriter,r *http.Request) {
-	w.WriteHeader(http.StatusOK)
-	w.Write([]byte(p.target.String()))
-}
-
-func newEchoProxy(target *url.URL , tr http.RoundTripper , flush time.Duration) http.Handler {
-
-	return &echoProxy{ target: target}
-}

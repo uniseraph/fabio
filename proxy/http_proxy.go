@@ -191,7 +191,7 @@ func (p *HTTPProxy) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	case dryrun == "true":
 
-		h = newEchoProxy(targetURL,tr,p.Config.FlushInterval)
+		h = newDryrunProxy(targetURL,tr,p.Config.FlushInterval)
 
 	default:
 		h = newHTTPProxy(targetURL, tr, p.Config.GlobalFlushInterval)
